@@ -15,12 +15,13 @@
 
   <button class="dark-toggle" id="darkToggle" title="Toggle Dark Mode">🌙</button>
 
-  <!-- Navigation -->
   <nav class="sticky top-0 z-50 shadow-lg">
     <div class="max-w-7xl mx-auto px-4 py-4">
       <div class="flex flex-wrap justify-center items-center gap-4">
         <a href="index.html" class="text-yellow-400 hover:text-white transition-colors duration-300 font-medium text-sm px-3 py-1">Home</a>
         <a href="about.html" class="text-yellow-400 hover:text-white transition-colors duration-300 font-medium text-sm px-3 py-1">About</a>
+        <a href="activities.html" class="text-yellow-400 hover:text-white transition-colors duration-300 font-medium text-sm px-3 py-1">Activities</a>
+        <a href="signup.html" class="bg-green-600 text-white hover:bg-green-500 transition-colors duration-300 font-bold text-sm px-4 py-2 rounded-lg">📝 Sign Up</a>
         <a href="login.html" class="bg-yellow-400 text-green-900 hover:bg-yellow-300 transition-colors duration-300 font-bold text-sm px-4 py-2 rounded-lg">🔑 Login</a>
       </div>
     </div>
@@ -35,32 +36,59 @@
     <p class="text-gray-600 text-lg">প্রোফাইল লোড হচ্ছে...</p>
   </div>
 
-  <!-- Error State -->
+  <!-- Error -->
   <div id="error-state" class="py-20 text-center hidden">
     <div class="text-6xl mb-4">😔</div>
     <h2 class="text-2xl font-bold text-gray-800 mb-2">প্রোফাইল পাওয়া যায়নি</h2>
-    <p class="text-gray-600">এই লিংকটি সঠিক নয় বা মেম্বার খুঁজে পাওয়া যায়নি।</p>
+    <p class="text-gray-600">এই লিংকটি সঠিক নয়।</p>
     <a href="index.html" class="inline-block mt-6 bg-green-700 text-white px-6 py-3 rounded-lg font-bold">🏠 হোমপেজে যান</a>
   </div>
 
   <!-- Profile Content -->
   <section id="profile-content" class="py-12 bg-gray-50 hidden">
     <div class="max-w-lg mx-auto px-6">
-
-      <!-- Profile Card -->
       <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-4 border-green-700">
+
+        <!-- Header with Photo -->
         <div class="gradient-bg p-8 text-center text-white">
-          <div class="w-28 h-28 mx-auto bg-yellow-400 rounded-full flex items-center justify-center text-5xl font-bold text-green-900 mb-4 border-4 border-white shadow-lg" id="p-avatar">
-            👤
+
+          <!-- Profile Picture -->
+          <div class="w-32 h-32 mx-auto rounded-full border-4 border-yellow-400 overflow-hidden shadow-lg bg-yellow-400" id="p-photo-container">
+            <!-- Text Avatar (নামের প্রথম অক্ষর) -->
+            <div id="p-avatar-text" class="w-full h-full flex items-center justify-center text-5xl font-bold text-green-900">
+              👤
+            </div>
+            <!-- Image Avatar (আসল ছবি) -->
+            <img id="p-avatar-image" 
+                 class="w-full h-full object-cover" 
+                 alt="Profile Picture"
+                 style="display: none;"
+                 onerror="this.style.display='none'; document.getElementById('p-avatar-text').style.display='flex';">
           </div>
-          <h2 class="text-3xl font-bold" id="p-name">---</h2>
+
+          <h2 class="text-3xl font-bold mt-4" id="p-name">---</h2>
           <p class="text-yellow-300 text-sm mt-2" id="p-id">Member ID: ---</p>
-          <span class="inline-block mt-3 px-4 py-1 bg-green-500 text-white text-sm font-bold rounded-full" id="p-status">
-            ✅ Active Member
-          </span>
+          <span class="inline-block mt-3 px-4 py-1 bg-green-500 text-white text-sm font-bold rounded-full" id="p-status">✅ Active Member</span>
         </div>
 
+        <!-- Info Cards -->
         <div class="p-6 space-y-3">
+
+          <div class="flex items-center gap-3 bg-gray-50 rounded-lg p-3">
+            <span class="text-xl">📧</span>
+            <div>
+              <p class="text-xs text-gray-500">ইমেইল</p>
+              <p class="font-semibold text-gray-800" id="p-email">---</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 bg-gray-50 rounded-lg p-3">
+            <span class="text-xl">📱</span>
+            <div>
+              <p class="text-xs text-gray-500">মোবাইল</p>
+              <p class="font-semibold text-gray-800" id="p-phone">---</p>
+            </div>
+          </div>
 
           <div class="flex items-center gap-3 bg-gray-50 rounded-lg p-3">
             <span class="text-xl">📚</span>
@@ -79,10 +107,26 @@
           </div>
 
           <div class="flex items-center gap-3 bg-gray-50 rounded-lg p-3">
+            <span class="text-xl">🔢</span>
+            <div>
+              <p class="text-xs text-gray-500">রোল নম্বর</p>
+              <p class="font-semibold text-gray-800" id="p-roll">---</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 bg-gray-50 rounded-lg p-3">
             <span class="text-xl">🩸</span>
             <div>
               <p class="text-xs text-gray-500">রক্তের গ্রুপ</p>
               <p class="font-semibold text-gray-800" id="p-blood">---</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 bg-gray-50 rounded-lg p-3">
+            <span class="text-xl">📍</span>
+            <div>
+              <p class="text-xs text-gray-500">ঠিকানা</p>
+              <p class="font-semibold text-gray-800" id="p-address">---</p>
             </div>
           </div>
 
@@ -101,15 +145,13 @@
           <p class="text-green-800 font-bold text-sm">🌟 Govt. Science College Islamic Cultural Club</p>
           <p class="text-gray-500 text-xs mt-1">Verified Member</p>
         </div>
+
       </div>
 
       <!-- Back Button -->
       <div class="text-center mt-6">
-        <a href="index.html" class="inline-block bg-green-700 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-600 transition-all">
-          🏠 GSCICC ওয়েবসাইটে যান
-        </a>
+        <a href="index.html" class="inline-block bg-green-700 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-600 transition-all">🏠 GSCICC ওয়েবসাইটে যান</a>
       </div>
-
     </div>
   </section>
 
@@ -130,45 +172,66 @@
     var memberId = urlParams.get('id');
 
     if (memberId) {
+      // Load member data
       db.collection('members').doc(memberId).get()
         .then(function(doc) {
           if (doc.exists) {
             var data = doc.data();
 
-            // Avatar
-            var initials = data.fullName ? data.fullName.charAt(0).toUpperCase() : '👤';
-            document.getElementById('p-avatar').textContent = initials;
+            // ===== প্রোফাইল ছবি সেট করা =====
+            var avatarText = document.getElementById('p-avatar-text');
+            var avatarImage = document.getElementById('p-avatar-image');
 
-            // Fill public data only
+            if (data.profilePicture && data.profilePicture.length > 10) {
+              // ছবি আছে - দেখান
+              avatarImage.src = data.profilePicture;
+              avatarImage.style.display = 'block';
+              avatarText.style.display = 'none';
+            } else {
+              // ছবি নেই - নামের প্রথম অক্ষর দেখান
+              var firstLetter = data.fullName ? data.fullName.charAt(0).toUpperCase() : '👤';
+              avatarText.textContent = firstLetter;
+              avatarText.style.display = 'flex';
+              avatarImage.style.display = 'none';
+            }
+
+            // ===== বাকি তথ্য সেট করা =====
             document.getElementById('p-name').textContent = data.fullName || '---';
             document.getElementById('p-id').textContent = 'Member ID: ' + (data.memberID || '---');
             document.getElementById('p-status').textContent = '✅ ' + (data.status || 'Active') + ' Member';
+            document.getElementById('p-email').textContent = data.email || '---';
+            document.getElementById('p-phone').textContent = data.phone || '---';
             document.getElementById('p-dept').textContent = data.department || '---';
             document.getElementById('p-session').textContent = data.session || '---';
+            document.getElementById('p-roll').textContent = data.roll || '---';
             document.getElementById('p-blood').textContent = data.bloodGroup || '---';
+            document.getElementById('p-address').textContent = data.address || '---';
 
             if (data.joinDate) {
               var date = new Date(data.joinDate);
               document.getElementById('p-joindate').textContent = date.toLocaleDateString('bn-BD');
             }
 
-            // Update page title
+            // Page title আপডেট
             document.title = data.fullName + ' | GSCICC Member';
 
-            // Show content
+            // Show profile
             document.getElementById('loading-state').classList.add('hidden');
             document.getElementById('profile-content').classList.remove('hidden');
+
           } else {
+            // Member পাওয়া যায়নি
             document.getElementById('loading-state').classList.add('hidden');
             document.getElementById('error-state').classList.remove('hidden');
           }
         })
         .catch(function(error) {
-          console.error('Error:', error);
+          console.error('Error loading profile:', error);
           document.getElementById('loading-state').classList.add('hidden');
           document.getElementById('error-state').classList.remove('hidden');
         });
     } else {
+      // URL এ ID নেই
       document.getElementById('loading-state').classList.add('hidden');
       document.getElementById('error-state').classList.remove('hidden');
     }
