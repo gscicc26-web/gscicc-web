@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSCICC | Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+</head>
+<body class="h-full smooth-scroll bg-gray-50">
+
+  <button class="dark-toggle" id="darkToggle" title="Toggle Dark Mode">🌙</button>
+
+  <!-- Navigation -->
+  <nav class="sticky top-0 z-50 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+      <div class="flex flex-wrap justify-center items-center gap-4">
+        <a href="index.html" class="text-yellow-400 hover:text-white transition-colors duration-300 font-medium text-sm px-3 py-1">Home</a>
+        <a href="about.html" class="text-yellow-400 hover:text-white transition-colors duration-300 font-medium text-sm px-3 py-1">About</a>
+        <a href="activities.html" class="text-yellow-400 hover:text-white transition-colors duration-300 font-medium text-sm px-3 py-1">Activities</a>
+        <a href="dashboard.html" class="text-yellow-400 hover:text-white transition-colors duration-300 font-medium text-sm px-3 py-1">Dashboard</a>
+        <button onclick="logOut()" class="bg-red-500 text-white hover:bg-red-600 transition-colors duration-300 font-bold text-sm px-4 py-2 rounded-lg">🚪 Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <div class="gradient-bg islamic-pattern py-12 text-center text-white">
+    <h1 class="text-4xl font-bold text-yellow-400 mb-2">মেম্বার ড্যাশবোর্ড</h1>
+    <p class="opacity-80">আপনার প্রোফাইল ও তথ্য</p>
+  </div>
+
+  <!-- Loading State -->
+  <div id="loading-state" class="py-20 text-center">
+    <svg class="animate-spin h-12 w-12 text-green-700 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+    </svg>
+    <p class="text-gray-600 text-lg">লোড হচ্ছে...</p>
+  </div>
+
+  <!-- Dashboard Content -->
+  <section id="dashboard-content" class="py-12 bg-gray-50 hidden">
+    <div class="max-w-4xl mx-auto px-6">
+
+      <!-- Member Card -->
+      <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-4 border-green-700 mb-8">
+        <div class="gradient-bg p-6 text-center text-white">
+          <div class="w-24 h-24 mx-auto bg-yellow-400 rounded-full flex items-center justify-center text-4xl font-bold text-green-900 mb-3" id="avatar">
+            👤
+          </div>
+          <h2 class="text-2xl font-bold" id="display-name">Loading...</h2>
+          <p class="text-yellow-300 text-sm mt-1" id="display-id">Member ID: ---</p>
+          <span class="inline-block mt-2 px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full" id="display-status">Active</span>
+        </div>
+
+        <div class="p-6">
+          <div class="grid md:grid-cols-2 gap-4">
+
+            <div class="bg-gray-50 rounded-lg p-4">
+              <p class="text-xs text-gray-500 font-semibold mb-1">📧 ইমেইল</p>
+              <p class="text-gray-800 font-medium" id="display-email">---</p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4">
+              <p class="text-xs text-gray-500 font-semibold mb-1">📱 মোবাইল</p>
+              <p class="text-gray-800 font-medium" id="display-phone">---</p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4">
+              <p class="text-xs text-gray-500 font-semibold mb-1">📚 বিভাগ</p>
+              <p class="text-gray-800 font-medium" id="display-dept">---</p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4">
+              <p class="text-xs text-gray-500 font-semibold mb-1">📅 সেশন</p>
+              <p class="text-gray-800 font-medium" id="display-session">---</p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4">
+              <p class="text-xs text-gray-500 font-semibold mb-1">🔢 রোল</p>
+              <p class="text-gray-800 font-medium" id="display-roll">---</p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4">
+              <p class="text-xs text-gray-500 font-semibold mb-1">🩸 রক্তের গ্রুপ</p>
+              <p class="text-gray-800 font-medium" id="display-blood">---</p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4 md:col-span-2">
+              <p class="text-xs text-gray-500 font-semibold mb-1">📍 ঠিকানা</p>
+              <p class="text-gray-800 font-medium" id="display-address">---</p>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4 md:col-span-2">
+              <p class="text-xs text-gray-500 font-semibold mb-1">📅 যোগদানের তারিখ</p>
+              <p class="text-gray-800 font-medium" id="display-joindate">---</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Share Profile -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 border-t-4 border-yellow-400">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">🔗 প্রোফাইল শেয়ার করুন</h3>
+        <div class="flex gap-3">
+          <input type="text" id="profile-link" readonly
+                 class="flex-1 px-4 py-3 bg-gray-100 border-2 border-gray-200 rounded-lg text-sm text-gray-600">
+          <button onclick="copyProfileLink()"
+                  class="bg-green-700 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-600 transition-all"
+                  id="copy-btn">
+            📋 কপি
+          </button>
+        </div>
+        <p class="text-gray-500 text-xs mt-2">এই লিংক শেয়ার করলে অন্যরা আপনার প্রোফাইল দেখতে পারবে</p>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="grid md:grid-cols-3 gap-4">
+        <a href="index.html" class="card bg-white rounded-xl p-6 text-center block">
+          <div class="text-3xl mb-2">🏠</div>
+          <p class="font-bold text-gray-800">হোমপেজ</p>
+        </a>
+        <a href="activities.html" class="card bg-white rounded-xl p-6 text-center block">
+          <div class="text-3xl mb-2">📋</div>
+          <p class="font-bold text-gray-800">কার্যক্রম</p>
+        </a>
+        <a href="contact.html" class="card bg-white rounded-xl p-6 text-center block">
+          <div class="text-3xl mb-2">📞</div>
+          <p class="font-bold text-gray-800">যোগাযোগ</p>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-10 text-center">
+    <div class="max-w-6xl mx-auto px-6">
+      <h3 class="text-2xl font-bold text-yellow-400 mb-4">GSC Islamic Cultural Club</h3>
+      <p class="opacity-70 mb-6">সরকারি বিজ্ঞান কলেজ, ঢাকা।</p>
+      <hr class="border-gray-700 mb-6">
+      <p class="text-sm opacity-50">&copy; 2024 GSCICC | Developed by <span class="text-yellow-400">MD Samin Ismail</span></p>
+    </div>
+  </footer>
+
+  <script src="firebase-config.js"></script>
+  <script>
+    // Check if user is logged in
+    auth.onAuthStateChanged(function(user) {
+      if (user) {
+        loadDashboard(user);
+      } else {
+        window.location.href = 'login.html';
+      }
+    });
+
+    function loadDashboard(user) {
+      db.collection('members').doc(user.uid).get()
+        .then(function(doc) {
+          if (doc.exists) {
+            var data = doc.data();
+
+            // Set avatar initial
+            var initials = data.fullName ? data.fullName.charAt(0).toUpperCase() : '👤';
+            document.getElementById('avatar').textContent = initials;
+
+            // Fill data
+            document.getElementById('display-name').textContent = data.fullName || '---';
+            document.getElementById('display-id').textContent = 'Member ID: ' + (data.memberID || '---');
+            document.getElementById('display-status').textContent = data.status || 'Active';
+            document.getElementById('display-email').textContent = data.email || '---';
+            document.getElementById('display-phone').textContent = data.phone || '---';
+            document.getElementById('display-dept').textContent = data.department || '---';
+            document.getElementById('display-session').textContent = data.session || '---';
+            document.getElementById('display-roll').textContent = data.roll || '---';
+            document.getElementById('display-blood').textContent = data.bloodGroup || '---';
+            document.getElementById('display-address').textContent = data.address || '---';
+
+            // Join date
+            if (data.joinDate) {
+              var date = new Date(data.joinDate);
+              document.getElementById('display-joindate').textContent = date.toLocaleDateString('bn-BD');
+            }
+
+            // Profile link
+            var currentUrl = window.location.origin + window.location.pathname.replace('dashboard.html', '');
+            document.getElementById('profile-link').value = currentUrl + 'profile.html?id=' + user.uid;
+
+            // Show content
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('dashboard-content').classList.remove('hidden');
+          }
+        })
+        .catch(function(error) {
+          console.error('Error loading data:', error);
+        });
+    }
+
+    // Copy profile link
+    function copyProfileLink() {
+      var linkInput = document.getElementById('profile-link');
+      linkInput.select();
+      document.execCommand('copy');
+
+      var copyBtn = document.getElementById('copy-btn');
+      copyBtn.textContent = '✅ কপি হয়েছে!';
+      copyBtn.classList.remove('bg-green-700');
+      copyBtn.classList.add('bg-green-500');
+
+      setTimeout(function() {
+        copyBtn.textContent = '📋 কপি';
+        copyBtn.classList.remove('bg-green-500');
+        copyBtn.classList.add('bg-green-700');
+      }, 2000);
+    }
+
+    // Logout
+    function logOut() {
+      auth.signOut().then(function() {
+        window.location.href = 'login.html';
+      });
+    }
+
+    // Dark Mode
+    var darkToggle = document.getElementById('darkToggle');
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+      darkToggle.textContent = '☀️';
+    }
+    darkToggle.addEventListener('click', function() {
+      document.body.classList.toggle('dark-mode');
+      var isDark = document.body.classList.contains('dark-mode');
+      darkToggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('darkMode', isDark);
+    });
+  </script>
+</body>
+</html>

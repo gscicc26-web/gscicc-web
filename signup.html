@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSCICC | Sign Up</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Serif+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+</head>
+<body class="h-full smooth-scroll bg-gray-50">
+
+  <button class="dark-toggle" id="darkToggle" title="Toggle Dark Mode">🌙</button>
+
+  <!-- Navigation -->
+  <nav class="sticky top-0 z-50 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+      <div class="flex flex-wrap justify-center items-center gap-4">
+        <a href="index.html" class="text-yellow-400 hover:text-white transition-colors duration-300 font-medium text-sm px-3 py-1">Home</a>
+        <a href="about.html" class="text-yellow-400 hover:text-white transition-colors duration-300 font-medium text-sm px-3 py-1">About</a>
+        <a href="activities.html" class="text-yellow-400 hover:text-white transition-colors duration-300 font-medium text-sm px-3 py-1">Activities</a>
+        <a href="committee.html" class="text-yellow-400 hover:text-white transition-colors duration-300 font-medium text-sm px-3 py-1">Committee</a>
+        <a href="founders.html" class="text-yellow-400 hover:text-white transition-colors duration-300 font-medium text-sm px-3 py-1">Founders</a>
+        <a href="gallery.html" class="text-yellow-400 hover:text-white transition-colors duration-300 font-medium text-sm px-3 py-1">Gallery</a>
+        <a href="constitution.html" class="text-yellow-400 hover:text-white transition-colors duration-300 font-medium text-sm px-3 py-1">Constitution</a>
+        <a href="contact.html" class="text-yellow-400 hover:text-white transition-colors duration-300 font-medium text-sm px-3 py-1">Contact</a>
+        <a href="login.html" class="bg-yellow-400 text-green-900 hover:bg-yellow-300 transition-colors duration-300 font-bold text-sm px-4 py-2 rounded-lg">🔑 Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <div class="gradient-bg islamic-pattern py-12 text-center text-white">
+    <h1 class="text-4xl font-bold text-yellow-400 mb-2">সদস্য হোন</h1>
+    <p class="opacity-80">GSCICC পরিবারে আপনাকে স্বাগতম</p>
+  </div>
+
+  <!-- Sign Up Form -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-lg mx-auto px-6">
+      <div class="bg-white rounded-2xl shadow-xl p-8 border-t-4 border-green-700">
+        <div class="text-center mb-8">
+          <div class="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center text-4xl mb-4">📝</div>
+          <h2 class="text-2xl font-bold text-gray-800">সদস্য রেজিস্ট্রেশন</h2>
+          <p class="text-gray-500 text-sm mt-2">নিচের ফর্ম পূরণ করুন</p>
+        </div>
+
+        <form id="signup-form" class="space-y-4">
+          <!-- Full Name -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">পূর্ণ নাম *</label>
+            <input type="text" id="fullName" placeholder="আপনার পূর্ণ নাম"
+                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required>
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">ইমেইল *</label>
+            <input type="email" id="email" placeholder="example@gmail.com"
+                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required>
+          </div>
+
+          <!-- Password -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">পাসওয়ার্ড * (কমপক্ষে ৬ অক্ষর)</label>
+            <input type="password" id="password" placeholder="পাসওয়ার্ড দিন"
+                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required minlength="6">
+          </div>
+
+          <!-- Phone -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">মোবাইল নম্বর *</label>
+            <input type="tel" id="phone" placeholder="01XXXXXXXXX"
+                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required>
+          </div>
+
+          <!-- Department -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">বিভাগ *</label>
+            <select id="department"
+                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required>
+              <option value="">বিভাগ নির্বাচন করুন</option>
+              <option value="Physics">পদার্থবিজ্ঞান (Physics)</option>
+              <option value="Chemistry">রসায়ন (Chemistry)</option>
+              <option value="Mathematics">গণিত (Mathematics)</option>
+              <option value="Zoology">প্রাণিবিদ্যা (Zoology)</option>
+              <option value="Botany">উদ্ভিদবিদ্যা (Botany)</option>
+              <option value="Statistics">পরিসংখ্যান (Statistics)</option>
+              <option value="Geography">ভূগোল (Geography)</option>
+              <option value="Other">অন্যান্য</option>
+            </select>
+          </div>
+
+          <!-- Session -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">সেশন *</label>
+            <input type="text" id="session" placeholder="যেমন: 2023-2024"
+                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required>
+          </div>
+
+          <!-- Roll -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">রোল নম্বর</label>
+            <input type="text" id="roll" placeholder="আপনার রোল নম্বর"
+                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition">
+          </div>
+
+          <!-- Blood Group -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">রক্তের গ্রুপ</label>
+            <select id="bloodGroup"
+                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition">
+              <option value="">নির্বাচন করুন</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+
+          <!-- Address -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">ঠিকানা</label>
+            <textarea id="address" rows="2" placeholder="আপনার বর্তমান ঠিকানা"
+                      class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition"></textarea>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" id="signup-btn"
+                  class="w-full bg-green-800 text-white font-bold py-4 rounded-lg hover:bg-green-700 transition-all duration-300 shadow-lg text-lg flex items-center justify-center gap-2">
+            <span id="signup-text">📝 রেজিস্ট্রেশন করুন</span>
+            <span id="signup-loading" class="hidden flex items-center gap-2">
+              <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+              প্রসেসিং...
+            </span>
+          </button>
+        </form>
+
+        <!-- Message -->
+        <div id="signup-message" class="mt-4 text-center text-sm font-medium hidden"></div>
+
+        <!-- Login Link -->
+        <div class="text-center mt-6 pt-6 border-t border-gray-200">
+          <p class="text-gray-600 text-sm">ইতিমধ্যে একাউন্ট আছে?
+            <a href="login.html" class="text-green-700 font-bold hover:underline">লগইন করুন</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-10 text-center">
+    <div class="max-w-6xl mx-auto px-6">
+      <h3 class="text-2xl font-bold text-yellow-400 mb-4">GSC Islamic Cultural Club</h3>
+      <p class="opacity-70 mb-6">সরকারি বিজ্ঞান কলেজ, ঢাকা।</p>
+      <hr class="border-gray-700 mb-6">
+      <p class="text-sm opacity-50">&copy; 2024 GSCICC | Developed by <span class="text-yellow-400">MD Samin Ismail</span></p>
+    </div>
+  </footer>
+
+  <script src="firebase-config.js"></script>
+  <script>
+    // Sign Up Handler
+    document.getElementById('signup-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var signupText = document.getElementById('signup-text');
+      var signupLoading = document.getElementById('signup-loading');
+      var signupBtn = document.getElementById('signup-btn');
+      var msgEl = document.getElementById('signup-message');
+
+      signupText.classList.add('hidden');
+      signupLoading.classList.remove('hidden');
+      signupBtn.disabled = true;
+
+      var email = document.getElementById('email').value;
+      var password = document.getElementById('password').value;
+
+      // Create user in Firebase Auth
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(function(userCredential) {
+          var user = userCredential.user;
+
+          // Save member data to Firestore
+          return db.collection('members').doc(user.uid).set({
+            fullName: document.getElementById('fullName').value,
+            email: email,
+            phone: document.getElementById('phone').value,
+            department: document.getElementById('department').value,
+            session: document.getElementById('session').value,
+            roll: document.getElementById('roll').value,
+            bloodGroup: document.getElementById('bloodGroup').value,
+            address: document.getElementById('address').value,
+            joinDate: new Date().toISOString(),
+            memberID: 'GSCICC-' + Date.now().toString().slice(-6),
+            status: 'Active',
+            uid: user.uid
+          });
+        })
+        .then(function() {
+          msgEl.innerHTML = '<div class="flex items-center justify-center gap-2"><span class="text-2xl">✅</span><div><strong>আলহামদুলিল্লাহ!</strong><br>রেজিস্ট্রেশন সফল হয়েছে। ড্যাশবোর্ডে যাচ্ছেন...</div></div>';
+          msgEl.className = 'mt-4 text-center text-sm font-medium text-green-700 bg-green-50 p-4 rounded-lg border border-green-200';
+          msgEl.classList.remove('hidden');
+
+          setTimeout(function() {
+            window.location.href = 'dashboard.html';
+          }, 2000);
+        })
+        .catch(function(error) {
+          var errorMsg = '';
+          switch(error.code) {
+            case 'auth/email-already-in-use':
+              errorMsg = 'এই ইমেইল দিয়ে ইতিমধ্যে একাউন্ট আছে। <a href="login.html" class="underline font-bold">লগইন করুন</a>';
+              break;
+            case 'auth/weak-password':
+              errorMsg = 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষর হতে হবে।';
+              break;
+            case 'auth/invalid-email':
+              errorMsg = 'সঠিক ইমেইল দিন।';
+              break;
+            default:
+              errorMsg = 'সমস্যা: ' + error.message;
+          }
+          msgEl.innerHTML = '<div class="flex items-center justify-center gap-2"><span class="text-2xl">❌</span><div>' + errorMsg + '</div></div>';
+          msgEl.className = 'mt-4 text-center text-sm font-medium text-red-700 bg-red-50 p-4 rounded-lg border border-red-200';
+          msgEl.classList.remove('hidden');
+        })
+        .finally(function() {
+          signupText.classList.remove('hidden');
+          signupLoading.classList.add('hidden');
+          signupBtn.disabled = false;
+        });
+    });
+
+    // Dark Mode
+    var darkToggle = document.getElementById('darkToggle');
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+      darkToggle.textContent = '☀️';
+    }
+    darkToggle.addEventListener('click', function() {
+      document.body.classList.toggle('dark-mode');
+      var isDark = document.body.classList.contains('dark-mode');
+      darkToggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('darkMode', isDark);
+    });
+  </script>
+</body>
+</html>
