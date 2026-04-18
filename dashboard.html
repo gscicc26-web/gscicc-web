@@ -15,7 +15,6 @@
 
   <button class="dark-toggle" id="darkToggle" title="Toggle Dark Mode">🌙</button>
 
-  <!-- Navigation -->
   <nav class="sticky top-0 z-50 shadow-lg">
     <div class="max-w-7xl mx-auto px-4 py-4">
       <div class="flex flex-wrap justify-center items-center gap-4">
@@ -28,13 +27,12 @@
     </div>
   </nav>
 
-  <!-- Header -->
   <div class="gradient-bg islamic-pattern py-12 text-center text-white">
     <h1 class="text-4xl font-bold text-yellow-400 mb-2">মেম্বার ড্যাশবোর্ড</h1>
     <p class="opacity-80">আপনার প্রোফাইল ও তথ্য</p>
   </div>
 
-  <!-- Loading State -->
+  <!-- Loading -->
   <div id="loading-state" class="py-20 text-center">
     <svg class="animate-spin h-12 w-12 text-green-700 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
       <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -43,64 +41,72 @@
     <p class="text-gray-600 text-lg">লোড হচ্ছে...</p>
   </div>
 
-  <!-- Dashboard Content -->
-  <section id="dashboard-content" class="py-12 bg-gray-50 hidden">
+  <!-- ===== VIEW MODE (তথ্য দেখা) ===== -->
+  <section id="view-mode" class="py-12 bg-gray-50 hidden">
     <div class="max-w-4xl mx-auto px-6">
 
       <!-- Member Card -->
       <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-4 border-green-700 mb-8">
         <div class="gradient-bg p-6 text-center text-white">
-          <div class="w-24 h-24 mx-auto bg-yellow-400 rounded-full flex items-center justify-center text-4xl font-bold text-green-900 mb-3" id="avatar">
-            👤
+
+          <!-- Profile Picture -->
+          <div class="relative inline-block">
+            <div class="w-28 h-28 mx-auto rounded-full border-4 border-yellow-400 overflow-hidden shadow-lg bg-yellow-400">
+              <div id="avatar-text" class="w-full h-full flex items-center justify-center text-4xl font-bold text-green-900">👤</div>
+              <img id="avatar-image" class="w-full h-full object-cover hidden" alt="Profile">
+            </div>
+            <button onclick="document.getElementById('change-photo').click()"
+                    class="absolute bottom-0 right-0 bg-yellow-400 text-green-900 w-9 h-9 rounded-full flex items-center justify-center text-lg shadow-lg hover:bg-yellow-300 transition-all border-2 border-white" title="ছবি পরিবর্তন">📷</button>
+            <input type="file" id="change-photo" accept="image/*" class="hidden" onchange="changeProfilePic(this)">
           </div>
-          <h2 class="text-2xl font-bold" id="display-name">Loading...</h2>
+
+          <h2 class="text-2xl font-bold mt-3" id="display-name">Loading...</h2>
           <p class="text-yellow-300 text-sm mt-1" id="display-id">Member ID: ---</p>
           <span class="inline-block mt-2 px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full" id="display-status">Active</span>
         </div>
 
         <div class="p-6">
           <div class="grid md:grid-cols-2 gap-4">
-
             <div class="bg-gray-50 rounded-lg p-4">
               <p class="text-xs text-gray-500 font-semibold mb-1">📧 ইমেইল</p>
               <p class="text-gray-800 font-medium" id="display-email">---</p>
             </div>
-
             <div class="bg-gray-50 rounded-lg p-4">
               <p class="text-xs text-gray-500 font-semibold mb-1">📱 মোবাইল</p>
               <p class="text-gray-800 font-medium" id="display-phone">---</p>
             </div>
-
             <div class="bg-gray-50 rounded-lg p-4">
               <p class="text-xs text-gray-500 font-semibold mb-1">📚 বিভাগ</p>
               <p class="text-gray-800 font-medium" id="display-dept">---</p>
             </div>
-
             <div class="bg-gray-50 rounded-lg p-4">
               <p class="text-xs text-gray-500 font-semibold mb-1">📅 সেশন</p>
               <p class="text-gray-800 font-medium" id="display-session">---</p>
             </div>
-
             <div class="bg-gray-50 rounded-lg p-4">
               <p class="text-xs text-gray-500 font-semibold mb-1">🔢 রোল</p>
               <p class="text-gray-800 font-medium" id="display-roll">---</p>
             </div>
-
             <div class="bg-gray-50 rounded-lg p-4">
               <p class="text-xs text-gray-500 font-semibold mb-1">🩸 রক্তের গ্রুপ</p>
               <p class="text-gray-800 font-medium" id="display-blood">---</p>
             </div>
-
             <div class="bg-gray-50 rounded-lg p-4 md:col-span-2">
               <p class="text-xs text-gray-500 font-semibold mb-1">📍 ঠিকানা</p>
               <p class="text-gray-800 font-medium" id="display-address">---</p>
             </div>
-
             <div class="bg-gray-50 rounded-lg p-4 md:col-span-2">
               <p class="text-xs text-gray-500 font-semibold mb-1">📅 যোগদানের তারিখ</p>
               <p class="text-gray-800 font-medium" id="display-joindate">---</p>
             </div>
+          </div>
 
+          <!-- Edit Button -->
+          <div class="mt-6 text-center">
+            <button onclick="showEditMode()"
+                    class="bg-yellow-400 text-green-900 font-bold px-8 py-3 rounded-xl hover:bg-yellow-300 transition-all shadow-lg text-lg">
+              ✏️ তথ্য পরিবর্তন করুন
+            </button>
           </div>
         </div>
       </div>
@@ -111,31 +117,121 @@
         <div class="flex gap-3">
           <input type="text" id="profile-link" readonly
                  class="flex-1 px-4 py-3 bg-gray-100 border-2 border-gray-200 rounded-lg text-sm text-gray-600">
-          <button onclick="copyProfileLink()"
-                  class="bg-green-700 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-600 transition-all"
-                  id="copy-btn">
-            📋 কপি
-          </button>
+          <button onclick="copyProfileLink()" class="bg-green-700 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-600 transition-all" id="copy-btn">📋 কপি</button>
         </div>
-        <p class="text-gray-500 text-xs mt-2">এই লিংক শেয়ার করলে অন্যরা আপনার প্রোফাইল দেখতে পারবে</p>
       </div>
 
       <!-- Quick Actions -->
       <div class="grid md:grid-cols-3 gap-4">
-        <a href="index.html" class="card bg-white rounded-xl p-6 text-center block">
-          <div class="text-3xl mb-2">🏠</div>
-          <p class="font-bold text-gray-800">হোমপেজ</p>
-        </a>
-        <a href="activities.html" class="card bg-white rounded-xl p-6 text-center block">
-          <div class="text-3xl mb-2">📋</div>
-          <p class="font-bold text-gray-800">কার্যক্রম</p>
-        </a>
-        <a href="contact.html" class="card bg-white rounded-xl p-6 text-center block">
-          <div class="text-3xl mb-2">📞</div>
-          <p class="font-bold text-gray-800">যোগাযোগ</p>
-        </a>
+        <a href="index.html" class="card bg-white rounded-xl p-6 text-center block"><div class="text-3xl mb-2">🏠</div><p class="font-bold text-gray-800">হোমপেজ</p></a>
+        <a href="activities.html" class="card bg-white rounded-xl p-6 text-center block"><div class="text-3xl mb-2">📋</div><p class="font-bold text-gray-800">কার্যক্রম</p></a>
+        <a href="contact.html" class="card bg-white rounded-xl p-6 text-center block"><div class="text-3xl mb-2">📞</div><p class="font-bold text-gray-800">যোগাযোগ</p></a>
       </div>
+    </div>
+  </section>
 
+  <!-- ===== EDIT MODE (তথ্য পরিবর্তন) ===== -->
+  <section id="edit-mode" class="py-12 bg-gray-50 hidden">
+    <div class="max-w-lg mx-auto px-6">
+      <div class="bg-white rounded-2xl shadow-xl p-8 border-t-4 border-yellow-400">
+
+        <div class="text-center mb-6">
+          <div class="w-16 h-16 mx-auto bg-yellow-100 rounded-full flex items-center justify-center text-3xl mb-3">✏️</div>
+          <h2 class="text-2xl font-bold text-gray-800">তথ্য পরিবর্তন করুন</h2>
+          <p class="text-gray-500 text-sm mt-1">যে তথ্য ভুল আছে সেটা ঠিক করুন</p>
+        </div>
+
+        <form id="edit-form" class="space-y-4">
+
+          <!-- Full Name -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">পূর্ণ নাম</label>
+            <input type="text" id="edit-name" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required>
+          </div>
+
+          <!-- Phone -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">মোবাইল নম্বর</label>
+            <input type="tel" id="edit-phone" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required>
+          </div>
+
+          <!-- Department -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">বিভাগ</label>
+            <select id="edit-dept" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition bg-white" required>
+              <option value="Physics">পদার্থবিজ্ঞান (Physics)</option>
+              <option value="Chemistry">রসায়ন (Chemistry)</option>
+              <option value="Mathematics">গণিত (Mathematics)</option>
+              <option value="Zoology">প্রাণিবিদ্যা (Zoology)</option>
+              <option value="Botany">উদ্ভিদবিদ্যা (Botany)</option>
+              <option value="Statistics">পরিসংখ্যান (Statistics)</option>
+              <option value="Geography">ভূগোল (Geography)</option>
+              <option value="Other">অন্যান্য</option>
+            </select>
+          </div>
+
+          <!-- Session -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">সেশন</label>
+            <input type="text" id="edit-session" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required>
+          </div>
+
+          <!-- Roll -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">রোল নম্বর</label>
+            <input type="text" id="edit-roll" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition">
+          </div>
+
+          <!-- Blood Group -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">রক্তের গ্রুপ</label>
+            <select id="edit-blood" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition bg-white">
+              <option value="">নির্বাচন করুন</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+
+          <!-- Address -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">ঠিকানা</label>
+            <textarea id="edit-address" rows="2" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition"></textarea>
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex gap-3 pt-4">
+            <button type="button" onclick="cancelEdit()"
+                    class="flex-1 bg-gray-200 text-gray-700 font-bold py-3 rounded-lg hover:bg-gray-300 transition-all">
+              ❌ বাতিল
+            </button>
+            <button type="submit" id="save-btn"
+                    class="flex-1 bg-green-700 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition-all flex items-center justify-center gap-2">
+              <span id="save-text">💾 সংরক্ষণ করুন</span>
+              <span id="save-loading" class="hidden flex items-center gap-2">
+                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+                সেভ হচ্ছে...
+              </span>
+            </button>
+          </div>
+        </form>
+
+        <div id="edit-message" class="mt-4 text-center text-sm font-medium hidden"></div>
+
+        <!-- Email Notice -->
+        <div class="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-center">
+          <p class="text-yellow-700 text-xs">⚠️ ইমেইল পরিবর্তন করতে চাইলে অ্যাডমিনের সাথে যোগাযোগ করুন</p>
+        </div>
+
+      </div>
     </div>
   </section>
 
@@ -151,94 +247,196 @@
 
   <script src="firebase-config.js"></script>
   <script>
-    // Check if user is logged in
+    var currentUserId = '';
+    var currentData = {};
+
+    // Check Login
     auth.onAuthStateChanged(function(user) {
       if (user) {
+        currentUserId = user.uid;
         loadDashboard(user);
       } else {
         window.location.href = 'login.html';
       }
     });
 
+    // Load Dashboard Data
     function loadDashboard(user) {
       db.collection('members').doc(user.uid).get()
         .then(function(doc) {
           if (doc.exists) {
-            var data = doc.data();
+            currentData = doc.data();
+            displayData(currentData);
 
-            // Set avatar initial
-            var initials = data.fullName ? data.fullName.charAt(0).toUpperCase() : '👤';
-            document.getElementById('avatar').textContent = initials;
-
-            // Fill data
-            document.getElementById('display-name').textContent = data.fullName || '---';
-            document.getElementById('display-id').textContent = 'Member ID: ' + (data.memberID || '---');
-            document.getElementById('display-status').textContent = data.status || 'Active';
-            document.getElementById('display-email').textContent = data.email || '---';
-            document.getElementById('display-phone').textContent = data.phone || '---';
-            document.getElementById('display-dept').textContent = data.department || '---';
-            document.getElementById('display-session').textContent = data.session || '---';
-            document.getElementById('display-roll').textContent = data.roll || '---';
-            document.getElementById('display-blood').textContent = data.bloodGroup || '---';
-            document.getElementById('display-address').textContent = data.address || '---';
-
-            // Join date
-            if (data.joinDate) {
-              var date = new Date(data.joinDate);
-              document.getElementById('display-joindate').textContent = date.toLocaleDateString('bn-BD');
-            }
-
-            // Profile link
             var currentUrl = window.location.origin + window.location.pathname.replace('dashboard.html', '');
             document.getElementById('profile-link').value = currentUrl + 'profile.html?id=' + user.uid;
 
-            // Show content
             document.getElementById('loading-state').classList.add('hidden');
-            document.getElementById('dashboard-content').classList.remove('hidden');
+            document.getElementById('view-mode').classList.remove('hidden');
           }
-        })
-        .catch(function(error) {
-          console.error('Error loading data:', error);
         });
     }
 
-    // Copy profile link
+    // Display Data
+    function displayData(data) {
+      // Profile Picture
+      if (data.profilePicture && data.profilePicture !== '') {
+        document.getElementById('avatar-image').src = data.profilePicture;
+        document.getElementById('avatar-image').classList.remove('hidden');
+        document.getElementById('avatar-text').classList.add('hidden');
+      } else {
+        var initials = data.fullName ? data.fullName.charAt(0).toUpperCase() : '👤';
+        document.getElementById('avatar-text').textContent = initials;
+        document.getElementById('avatar-text').classList.remove('hidden');
+        document.getElementById('avatar-image').classList.add('hidden');
+      }
+
+      document.getElementById('display-name').textContent = data.fullName || '---';
+      document.getElementById('display-id').textContent = 'Member ID: ' + (data.memberID || '---');
+      document.getElementById('display-status').textContent = data.status || 'Active';
+      document.getElementById('display-email').textContent = data.email || '---';
+      document.getElementById('display-phone').textContent = data.phone || '---';
+      document.getElementById('display-dept').textContent = data.department || '---';
+      document.getElementById('display-session').textContent = data.session || '---';
+      document.getElementById('display-roll').textContent = data.roll || '---';
+      document.getElementById('display-blood').textContent = data.bloodGroup || '---';
+      document.getElementById('display-address').textContent = data.address || '---';
+
+      if (data.joinDate) {
+        var date = new Date(data.joinDate);
+        document.getElementById('display-joindate').textContent = date.toLocaleDateString('bn-BD');
+      }
+    }
+
+    // Show Edit Mode
+    function showEditMode() {
+      document.getElementById('edit-name').value = currentData.fullName || '';
+      document.getElementById('edit-phone').value = currentData.phone || '';
+      document.getElementById('edit-dept').value = currentData.department || '';
+      document.getElementById('edit-session').value = currentData.session || '';
+      document.getElementById('edit-roll').value = currentData.roll || '';
+      document.getElementById('edit-blood').value = currentData.bloodGroup || '';
+      document.getElementById('edit-address').value = currentData.address || '';
+
+      document.getElementById('view-mode').classList.add('hidden');
+      document.getElementById('edit-mode').classList.remove('hidden');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Cancel Edit
+    function cancelEdit() {
+      document.getElementById('edit-mode').classList.add('hidden');
+      document.getElementById('view-mode').classList.remove('hidden');
+      document.getElementById('edit-message').classList.add('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Save Edit
+    document.getElementById('edit-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var saveText = document.getElementById('save-text');
+      var saveLoading = document.getElementById('save-loading');
+      var saveBtn = document.getElementById('save-btn');
+      var msgEl = document.getElementById('edit-message');
+
+      saveText.classList.add('hidden');
+      saveLoading.classList.remove('hidden');
+      saveBtn.disabled = true;
+
+      var updatedData = {
+        fullName: document.getElementById('edit-name').value,
+        phone: document.getElementById('edit-phone').value,
+        department: document.getElementById('edit-dept').value,
+        session: document.getElementById('edit-session').value,
+        roll: document.getElementById('edit-roll').value,
+        bloodGroup: document.getElementById('edit-blood').value,
+        address: document.getElementById('edit-address').value,
+        lastUpdated: new Date().toISOString()
+      };
+
+      db.collection('members').doc(currentUserId).update(updatedData)
+        .then(function() {
+          // Update local data
+          Object.assign(currentData, updatedData);
+          displayData(currentData);
+
+          msgEl.innerHTML = '✅ <strong>আলহামদুলিল্লাহ!</strong> তথ্য সফলভাবে আপডেট হয়েছে!';
+          msgEl.className = 'mt-4 text-center text-sm font-medium text-green-700 bg-green-50 p-4 rounded-lg border border-green-200';
+          msgEl.classList.remove('hidden');
+
+          setTimeout(function() {
+            cancelEdit();
+          }, 2000);
+        })
+        .catch(function(error) {
+          msgEl.innerHTML = '❌ আপডেট করতে সমস্যা হয়েছে: ' + error.message;
+          msgEl.className = 'mt-4 text-center text-sm font-medium text-red-700 bg-red-50 p-4 rounded-lg border border-red-200';
+          msgEl.classList.remove('hidden');
+        })
+        .finally(function() {
+          saveText.classList.remove('hidden');
+          saveLoading.classList.add('hidden');
+          saveBtn.disabled = false;
+        });
+    });
+
+    // Change Profile Picture
+    function changeProfilePic(input) {
+      if (!input.files || !input.files[0]) return;
+      var file = input.files[0];
+
+      if (file.size > 500 * 1024) { alert('সর্বোচ্চ 500KB!'); return; }
+      if (!file.type.startsWith('image/')) { alert('শুধু ছবি!'); return; }
+
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var img = new Image();
+        img.onload = function() {
+          var canvas = document.createElement('canvas');
+          var maxSize = 300;
+          var w = img.width, h = img.height;
+          if (w > h) { if (w > maxSize) { h = h * (maxSize / w); w = maxSize; } }
+          else { if (h > maxSize) { w = w * (maxSize / h); h = maxSize; } }
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          var base64 = canvas.toDataURL('image/jpeg', 0.7);
+
+          db.collection('members').doc(currentUserId).update({ profilePicture: base64 })
+            .then(function() {
+              currentData.profilePicture = base64;
+              document.getElementById('avatar-image').src = base64;
+              document.getElementById('avatar-image').classList.remove('hidden');
+              document.getElementById('avatar-text').classList.add('hidden');
+              alert('✅ ছবি আপডেট হয়েছে!');
+            })
+            .catch(function() { alert('❌ ছবি আপডেট ব্যর্থ!'); });
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Copy Profile Link
     function copyProfileLink() {
       var linkInput = document.getElementById('profile-link');
       linkInput.select();
       document.execCommand('copy');
-
       var copyBtn = document.getElementById('copy-btn');
       copyBtn.textContent = '✅ কপি হয়েছে!';
-      copyBtn.classList.remove('bg-green-700');
-      copyBtn.classList.add('bg-green-500');
-
-      setTimeout(function() {
-        copyBtn.textContent = '📋 কপি';
-        copyBtn.classList.remove('bg-green-500');
-        copyBtn.classList.add('bg-green-700');
-      }, 2000);
+      setTimeout(function() { copyBtn.textContent = '📋 কপি'; }, 2000);
     }
 
     // Logout
     function logOut() {
-      auth.signOut().then(function() {
-        window.location.href = 'login.html';
-      });
+      auth.signOut().then(function() { window.location.href = 'login.html'; });
     }
 
     // Dark Mode
     var darkToggle = document.getElementById('darkToggle');
-    if (localStorage.getItem('darkMode') === 'true') {
-      document.body.classList.add('dark-mode');
-      darkToggle.textContent = '☀️';
-    }
-    darkToggle.addEventListener('click', function() {
-      document.body.classList.toggle('dark-mode');
-      var isDark = document.body.classList.contains('dark-mode');
-      darkToggle.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem('darkMode', isDark);
-    });
+    if (localStorage.getItem('darkMode') === 'true') { document.body.classList.add('dark-mode'); darkToggle.textContent = '☀️'; }
+    darkToggle.addEventListener('click', function() { document.body.classList.toggle('dark-mode'); var isDark = document.body.classList.contains('dark-mode'); darkToggle.textContent = isDark ? '☀️' : '🌙'; localStorage.setItem('darkMode', isDark); });
   </script>
 </body>
 </html>
