@@ -10,6 +10,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body class="h-full smooth-scroll bg-gray-50">
 
@@ -45,6 +46,10 @@
           <div class="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center text-4xl mb-4">📝</div>
           <h2 class="text-2xl font-bold text-gray-800">সদস্য রেজিস্ট্রেশন</h2>
           <p class="text-gray-500 text-sm mt-2">নিচের ফর্ম পূরণ করুন</p>
+          <!-- Notice -->
+          <div class="mt-3 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+            <p class="text-yellow-700 text-xs">⚠️ রেজিস্ট্রেশনের পর অ্যাডমিন অনুমোদন দিলে আপনার একাউন্ট সক্রিয় হবে</p>
+          </div>
         </div>
 
         <form id="signup-form" class="space-y-4">
@@ -52,11 +57,8 @@
           <!-- Profile Picture -->
           <div class="text-center">
             <label class="block text-sm font-semibold text-gray-700 mb-3">প্রোফাইল ছবি</label>
-
-            <!-- Preview Circle -->
             <div class="relative inline-block">
-              <div id="preview-container"
-                   onclick="document.getElementById('profilePic').click()"
+              <div id="preview-container" onclick="document.getElementById('profilePic').click()"
                    class="w-32 h-32 mx-auto rounded-full border-4 border-dashed border-gray-300 flex items-center justify-center overflow-hidden cursor-pointer hover:border-yellow-400 hover:shadow-lg transition-all bg-gray-50">
                 <div id="preview-placeholder" class="text-center pointer-events-none">
                   <div class="text-4xl">📷</div>
@@ -64,110 +66,75 @@
                 </div>
                 <img id="preview-image" class="w-full h-full object-cover hidden" alt="Preview">
               </div>
-
-              <!-- Remove Button -->
-              <button type="button" id="remove-btn"
-                      onclick="removePhoto()"
-                      class="hidden absolute -top-1 -right-1 bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-full text-sm font-bold shadow-lg transition-all">
-                ✕
-              </button>
+              <button type="button" id="remove-btn" onclick="removePhoto()"
+                      class="hidden absolute -top-1 -right-1 bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-full text-sm font-bold shadow-lg transition-all">✕</button>
             </div>
-
             <input type="file" id="profilePic" accept="image/*" class="hidden" onchange="previewPhoto(this)">
-
-            <p class="text-xs text-gray-400 mt-2">📌 সর্বোচ্চ 500KB · JPG বা PNG</p>
+            <p class="text-xs text-gray-400 mt-2">সর্বোচ্চ 500KB · JPG বা PNG</p>
             <p id="photo-error" class="text-xs text-red-500 mt-1 hidden"></p>
           </div>
 
-          <!-- Full Name -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1">পূর্ণ নাম *</label>
-            <input type="text" id="fullName" placeholder="আপনার পূর্ণ নাম"
-                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required>
+            <input type="text" id="fullName" placeholder="আপনার পূর্ণ নাম" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required>
           </div>
 
-          <!-- Email -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1">ইমেইল *</label>
-            <input type="email" id="email" placeholder="example@gmail.com"
-                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required>
+            <input type="email" id="email" placeholder="example@gmail.com" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required>
           </div>
 
-          <!-- Password -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1">পাসওয়ার্ড * (কমপক্ষে ৬ অক্ষর)</label>
             <div class="relative">
-              <input type="password" id="password" placeholder="পাসওয়ার্ড দিন"
-                     class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition pr-12" required minlength="6">
-              <button type="button" onclick="togglePassword()"
-                      class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xl">
-                👁️
-              </button>
+              <input type="password" id="password" placeholder="পাসওয়ার্ড দিন" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition pr-12" required minlength="6">
+              <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xl">👁️</button>
             </div>
           </div>
 
-          <!-- Phone -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1">মোবাইল নম্বর *</label>
-            <input type="tel" id="phone" placeholder="01XXXXXXXXX"
-                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required>
+            <input type="tel" id="phone" placeholder="01XXXXXXXXX" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required>
           </div>
 
-          <!-- Department -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1">বিভাগ *</label>
             <select id="department" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition bg-white" required>
               <option value="">বিভাগ নির্বাচন করুন</option>
-              <option value="Science">বিজ্ঞান (Science)</option>
+              <option value="Science">বিজ্ঞান</option>
             </select>
           </div>
 
-          <!-- Session -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1">সেশন *</label>
-            <input type="text" id="session" placeholder="যেমন: 2023-2024"
-                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required>
+            <input type="text" id="session" placeholder="যেমন: 2023-2024" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition" required>
           </div>
 
-          <!-- Roll -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1">রোল নম্বর</label>
-            <input type="text" id="roll" placeholder="আপনার রোল নম্বর"
-                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition">
+            <input type="text" id="roll" placeholder="আপনার রোল নম্বর" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition">
           </div>
 
-          <!-- Blood Group -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1">রক্তের গ্রুপ</label>
             <select id="bloodGroup" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition bg-white">
               <option value="">নির্বাচন করুন</option>
-              <option value="A+">A+</option>
-              <option value="A-">A-</option>
-              <option value="B+">B+</option>
-              <option value="B-">B-</option>
-              <option value="O+">O+</option>
-              <option value="O-">O-</option>
-              <option value="AB+">AB+</option>
-              <option value="AB-">AB-</option>
+              <option value="A+">A+</option><option value="A-">A-</option>
+              <option value="B+">B+</option><option value="B-">B-</option>
+              <option value="O+">O+</option><option value="O-">O-</option>
+              <option value="AB+">AB+</option><option value="AB-">AB-</option>
             </select>
           </div>
 
-          <!-- Address -->
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1">ঠিকানা</label>
-            <textarea id="address" rows="2" placeholder="আপনার বর্তমান ঠিকানা"
-                      class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition"></textarea>
+            <textarea id="address" rows="2" placeholder="আপনার বর্তমান ঠিকানা" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-yellow-400 focus:outline-none transition"></textarea>
           </div>
 
-          <!-- Submit -->
-          <button type="submit" id="signup-btn"
-                  class="w-full bg-green-800 text-white font-bold py-4 rounded-lg hover:bg-green-700 transition-all duration-300 shadow-lg text-lg flex items-center justify-center gap-2">
+          <button type="submit" id="signup-btn" class="w-full bg-green-800 text-white font-bold py-4 rounded-lg hover:bg-green-700 transition-all duration-300 shadow-lg text-lg flex items-center justify-center gap-2">
             <span id="signup-text">📝 রেজিস্ট্রেশন করুন</span>
             <span id="signup-loading" class="hidden flex items-center gap-2">
-              <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-              </svg>
+              <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
               প্রসেসিং...
             </span>
           </button>
@@ -176,9 +143,7 @@
         <div id="signup-message" class="mt-4 text-center text-sm font-medium hidden"></div>
 
         <div class="text-center mt-6 pt-6 border-t border-gray-200">
-          <p class="text-gray-600 text-sm">ইতিমধ্যে একাউন্ট আছে?
-            <a href="login.html" class="text-green-700 font-bold hover:underline">লগইন করুন</a>
-          </p>
+          <p class="text-gray-600 text-sm">ইতিমধ্যে একাউন্ট আছে? <a href="login.html" class="text-green-700 font-bold hover:underline">লগইন করুন</a></p>
         </div>
       </div>
     </div>
@@ -187,7 +152,6 @@
   <footer class="bg-gray-900 text-white py-10 text-center">
     <div class="max-w-6xl mx-auto px-6">
       <h3 class="text-2xl font-bold text-yellow-400 mb-4">GSC Islamic Cultural Club</h3>
-      <p class="opacity-70 mb-6">সরকারি বিজ্ঞান কলেজ, ঢাকা।</p>
       <hr class="border-gray-700 mb-6">
       <p class="text-sm opacity-50">&copy; 2024 GSCICC | Developed by <span class="text-yellow-400">MD Samin Ismail</span></p>
     </div>
@@ -197,54 +161,26 @@
   <script>
     var photoBase64 = '';
 
-    // Preview Photo
+    // EmailJS init
+    emailjs.init('4McRUK1Y1iGOjnHZb');
+
     function previewPhoto(input) {
       var errorEl = document.getElementById('photo-error');
       errorEl.classList.add('hidden');
-
       if (!input.files || !input.files[0]) return;
       var file = input.files[0];
-
-      // 500KB limit
-      if (file.size > 500 * 1024) {
-        errorEl.textContent = '❌ ছবি 500KB এর বেশি হতে পারবে না! ছোট করুন।';
-        errorEl.classList.remove('hidden');
-        input.value = '';
-        return;
-      }
-
-      if (!file.type.startsWith('image/')) {
-        errorEl.textContent = '❌ শুধুমাত্র ছবি ফাইল আপলোড করুন!';
-        errorEl.classList.remove('hidden');
-        input.value = '';
-        return;
-      }
-
-      // Compress and convert to base64
+      if (file.size > 500 * 1024) { errorEl.textContent = '❌ 500KB এর বেশি!'; errorEl.classList.remove('hidden'); input.value = ''; return; }
+      if (!file.type.startsWith('image/')) { errorEl.textContent = '❌ শুধু ছবি!'; errorEl.classList.remove('hidden'); input.value = ''; return; }
       var reader = new FileReader();
       reader.onload = function(e) {
-        // Compress image
         var img = new Image();
         img.onload = function() {
           var canvas = document.createElement('canvas');
-          var maxSize = 300; // 300x300 max
-          var width = img.width;
-          var height = img.height;
-
-          if (width > height) {
-            if (width > maxSize) { height = height * (maxSize / width); width = maxSize; }
-          } else {
-            if (height > maxSize) { width = width * (maxSize / height); height = maxSize; }
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-          var ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-
+          var maxSize = 300, w = img.width, h = img.height;
+          if (w > h) { if (w > maxSize) { h = h * (maxSize / w); w = maxSize; } } else { if (h > maxSize) { w = w * (maxSize / h); h = maxSize; } }
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
           photoBase64 = canvas.toDataURL('image/jpeg', 0.7);
-
-          // Show preview
           document.getElementById('preview-image').src = photoBase64;
           document.getElementById('preview-image').classList.remove('hidden');
           document.getElementById('preview-placeholder').classList.add('hidden');
@@ -257,11 +193,9 @@
       reader.readAsDataURL(file);
     }
 
-    // Remove Photo
     function removePhoto() {
       photoBase64 = '';
       document.getElementById('profilePic').value = '';
-      document.getElementById('preview-image').src = '';
       document.getElementById('preview-image').classList.add('hidden');
       document.getElementById('preview-placeholder').classList.remove('hidden');
       document.getElementById('remove-btn').classList.add('hidden');
@@ -269,16 +203,27 @@
       document.getElementById('preview-container').classList.remove('border-solid', 'border-yellow-400');
     }
 
-    // Toggle Password
     function togglePassword() {
       var pwd = document.getElementById('password');
       pwd.type = pwd.type === 'password' ? 'text' : 'password';
     }
 
+    // Send notification to admin
+    function notifyAdmin(memberName, memberEmail, memberDept) {
+      emailjs.send('service_244m0pm', 'template_v0lw5j9', {
+        from_name: 'GSCICC System',
+        from_email: memberEmail,
+        message: '🆕 নতুন সদস্য রেজিস্ট্রেশন!\n\nনাম: ' + memberName + '\nইমেইল: ' + memberEmail + '\nবিভাগ: ' + memberDept + '\n\n👉 Admin Panel এ গিয়ে Approve করুন।'
+      }).then(function() {
+        console.log('✅ Admin notified');
+      }).catch(function(err) {
+        console.log('Admin notification failed:', err);
+      });
+    }
+
     // Sign Up
     document.getElementById('signup-form').addEventListener('submit', function(e) {
       e.preventDefault();
-
       var signupText = document.getElementById('signup-text');
       var signupLoading = document.getElementById('signup-loading');
       var signupBtn = document.getElementById('signup-btn');
@@ -290,15 +235,17 @@
 
       var email = document.getElementById('email').value;
       var password = document.getElementById('password').value;
+      var fullName = document.getElementById('fullName').value;
+      var dept = document.getElementById('department').value;
 
       auth.createUserWithEmailAndPassword(email, password)
         .then(function(userCredential) {
           var user = userCredential.user;
           return db.collection('members').doc(user.uid).set({
-            fullName: document.getElementById('fullName').value,
+            fullName: fullName,
             email: email,
             phone: document.getElementById('phone').value,
-            department: document.getElementById('department').value,
+            department: dept,
             session: document.getElementById('session').value,
             roll: document.getElementById('roll').value,
             bloodGroup: document.getElementById('bloodGroup').value,
@@ -306,25 +253,31 @@
             profilePicture: photoBase64,
             joinDate: new Date().toISOString(),
             memberID: 'GSCICC-' + Date.now().toString().slice(-6),
-            status: 'Active',
+            status: 'Pending',
             uid: user.uid
           });
         })
         .then(function() {
-          msgEl.innerHTML = '<div class="flex items-center justify-center gap-2"><span class="text-2xl">✅</span><div><strong>আলহামদুলিল্লাহ!</strong><br>রেজিস্ট্রেশন সফল! ড্যাশবোর্ডে যাচ্ছেন...</div></div>';
-          msgEl.className = 'mt-4 text-center text-sm font-medium text-green-700 bg-green-50 p-4 rounded-lg border border-green-200';
+          // Admin কে ইমেইল পাঠান
+          notifyAdmin(fullName, email, dept);
+
+          msgEl.innerHTML = '<div class="text-center"><span class="text-4xl block mb-3">⏳</span><strong class="text-lg">রেজিস্ট্রেশন সফল!</strong><br><br>আপনার আবেদন অ্যাডমিনের কাছে পাঠানো হয়েছে।<br>অনুমোদনের পর আপনার একাউন্ট সক্রিয় হবে।<br><br><small class="text-gray-500">ইমেইলে নোটিফিকেশন পাবেন ইনশাআল্লাহ।</small></div>';
+          msgEl.className = 'mt-4 text-center text-sm font-medium text-yellow-800 bg-yellow-50 p-6 rounded-lg border border-yellow-200';
           msgEl.classList.remove('hidden');
-          setTimeout(function() { window.location.href = 'dashboard.html'; }, 2000);
+
+          // Sign out (Pending থাকায় login করতে দেবো না)
+          auth.signOut();
+          document.getElementById('signup-form').reset();
+          removePhoto();
         })
         .catch(function(error) {
           var errorMsg = '';
           switch(error.code) {
             case 'auth/email-already-in-use': errorMsg = 'এই ইমেইলে ইতিমধ্যে একাউন্ট আছে। <a href="login.html" class="underline font-bold">লগইন করুন</a>'; break;
             case 'auth/weak-password': errorMsg = 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষর হতে হবে।'; break;
-            case 'auth/invalid-email': errorMsg = 'সঠিক ইমেইল দিন।'; break;
-            default: errorMsg = 'সমস্যা হয়েছে: ' + error.message;
+            default: errorMsg = error.message;
           }
-          msgEl.innerHTML = '<div class="flex items-center gap-2"><span class="text-2xl">❌</span><div>' + errorMsg + '</div></div>';
+          msgEl.innerHTML = '❌ ' + errorMsg;
           msgEl.className = 'mt-4 text-center text-sm font-medium text-red-700 bg-red-50 p-4 rounded-lg border border-red-200';
           msgEl.classList.remove('hidden');
         })
@@ -335,7 +288,6 @@
         });
     });
 
-    // Dark Mode
     var darkToggle = document.getElementById('darkToggle');
     if (localStorage.getItem('darkMode') === 'true') { document.body.classList.add('dark-mode'); darkToggle.textContent = '☀️'; }
     darkToggle.addEventListener('click', function() { document.body.classList.toggle('dark-mode'); var isDark = document.body.classList.contains('dark-mode'); darkToggle.textContent = isDark ? '☀️' : '🌙'; localStorage.setItem('darkMode', isDark); });
